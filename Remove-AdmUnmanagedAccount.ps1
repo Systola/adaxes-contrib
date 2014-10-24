@@ -32,9 +32,9 @@
     Specifies the Adaxes services instance to connect to.
 
     .EXAMPLE
-    Add-AdmUnmanagedAccount.ps1 -User cavejonson@aperture.com
-    Add-AdmUnmanagedAccount.ps1 -Group Summer-Externs -Recursive
-    Add-AdmUnmanagedAccount.ps1 -OrganizationalUnit MassDyn -Subtree
+    Remove-AdmUnmanagedAccount.ps1 -User cavejonson@aperture.com
+    Remove-AdmUnmanagedAccount.ps1 -Group Summer-Externs -Recursive
+    Remove-AdmUnmanagedAccount.ps1 -OrganizationalUnit MassDyn -Subtree
   
 #>
 
@@ -68,15 +68,15 @@ param
 
 begin
 {
-    Import-Module ActiveDirectory, Adaxes
+    Import-Module ActiveDirectory
 
     $ns = New-Object 'Softerra.Adaxes.Adsi.AdmNamespace'
-    $adaxes = $ns.GetServiceDirectly( $AdaxesService )
+    $adaxes = $ns.GetServiceDirectly($AdaxesService)
 
     $path = $adaxes.Backend.GetConfigurationContainerPath('ConfigurationSetSettings')
     $settings = $adaxes.OpenObject($path, $null, $null, 0)
 
-    $global:sids = $settings.GetUnmanagedAccounts( @() ) | % { $a = @{} }{ $a[$_.Key] = $null }{ $a }
+    $global:sids = $settings.GetUnmanagedAccounts(@()) | % { $a = @{} }{ $a[$_.Key] = $null }{ $a }
     
     function Process-SingleIdentity($Object)
     {

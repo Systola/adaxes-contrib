@@ -38,7 +38,7 @@
     .EXAMPLE
     Add-AdmUnmanagedAccount.ps1 -User cavejonson@aperture.com
     Add-AdmUnmanagedAccount.ps1 -Group Summer-Externs -Recursive
-    Add-AdmUnmanagedAccount.ps1 -OrganizationalUnit MassDyn -Subtree
+    Add-AdmUnmanagedAccount.ps1 -OrganizationalUnit 'ou=externs,dc=massdyn,dc=corp' -Subtree
   
 #>
 
@@ -76,7 +76,7 @@ param
 
 begin
 {
-    Import-Module ActiveDirectory, Adaxes
+    Import-Module ActiveDirectory
 
     $ns = New-Object 'Softerra.Adaxes.Adsi.AdmNamespace'
     $adaxes = $ns.GetServiceDirectly( $AdaxesService )

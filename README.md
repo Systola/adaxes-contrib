@@ -1,6 +1,6 @@
-﻿# Softerra Adaxes Contribution Scripts
+# Adaxes Contribution Scripts
 
-Here is a collection of scripts created by Systola for Softerra Adaxes
+A collection of contribution scripts created by [Systola](http://systola.com) for [Softerra Adaxes](http://adaxes.com).
 
 ## Licence
 

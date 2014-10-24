@@ -8,10 +8,7 @@
  
     .PARAMETER Properties
     Provide a list of properties to query from an excluded account.
- 
-    .PARAMETER AsAdaxes
-    Return an account as [Softerra.Adaxes.PowerShellModule.Directory.ADUser] object.
- 
+  
     .PARAMETER AsMicrosoft
     Return an account as [Microsoft.ActiveDirectory.Management.ADUser] object.
 
@@ -19,24 +16,20 @@
     Specifies the Adaxes services instance to connect to.
 
     .EXAMPLE
-    Get-AdmUnmanagedAccount.ps1 -Properties name,email,phoneNumber
+    Get-AdmUnmanagedAccount.ps1 -Properties name,mail,phoneNumber
     Get-AdmUnmanagedAccount.ps1 -AsMicrosoft
     Get-AdmUnmanagedAccount.ps1 -AdaxesService 'adaxes.example.net'
   
 #>
 
-[CmdletBinding(DefaultParameterSetName='None')]
+[CmdletBinding()]
 param
 (
     [Parameter(Mandatory=$false)]
     [String[]]
-    $Properties = @('distinguishedName', 'objectGUID'),
+    $Properties = @('objectClass'),
 
-    [Parameter(Mandatory=$false, ParameterSetName='Adaxes')]
-    [Switch]
-    $AsAdaxes,
-
-    [Parameter(Mandatory=$false, ParameterSetName='Microsoft')]
+    [Parameter(Mandatory=$false)]
     [Switch]
     $AsMicrosoft,
 
@@ -52,17 +45,13 @@ $adaxes = $ns.GetServiceDirectly($AdaxesService)
 $path = $adaxes.Backend.GetConfigurationContainerPath('ConfigurationSetSettings')
 $settings = $adaxes.OpenObject($path, $null, $null, 0)
 
-$accounts = $settings.GetUnmanagedAccounts($Properties)
+$accounts = $settings.GetUnmanagedAccounts(@())
 
-if($AsAdaxes)
+if($AsMicrosoft)
 {
     $accounts | % { Get-AdmUser -Identity $_.Key -Properties $Properties }
 }
-elseif($AsMicrosoft)
-{
-    $accounts | % { Get-AdUser -Identity $_.Key -Properties $Properties }
-}
 else
 {
-    $accounts    
+    $accounts | % { Get-AdUser -Identity $_.Key -Properties $Properties }
 }
