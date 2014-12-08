@@ -22,6 +22,8 @@ param
     $AdaxesService = 'localhost'
 )
 
+[Reflection.Assembly]::LoadWithPartialName('Softerra.Adaxes.Adsi')
+
 $ns = New-Object 'Softerra.Adaxes.Adsi.AdmNamespace'
 $adaxes = $ns.GetServiceDirectly($AdaxesService)
 
